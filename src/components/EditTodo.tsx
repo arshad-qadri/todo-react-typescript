@@ -10,7 +10,10 @@ const EditTodo = ({ todos, todo, setTodos, inpRef, setEditID }: IEdit) => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (!inpVal) {
+      alert("Please type some thing...!");
+      return;
+    }
     const edited = todos.map((item) =>
       item.id === todo.id ? { ...item, todo: inpVal } : item
     );

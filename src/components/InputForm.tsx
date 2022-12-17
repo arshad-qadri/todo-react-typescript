@@ -1,12 +1,12 @@
-import React, {  useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import InputBox from "../commonComponent/InputBox";
 import { PropsType } from "../model";
-interface IProps extends PropsType{
-  btn:string
+interface IProps extends PropsType {
+  btn: string;
 }
 
-const InputForm = ({ todos, setTodos,btn }: IProps) => {
+const InputForm = ({ todos, setTodos, btn }: IProps) => {
   const inpRef = useRef<HTMLInputElement | null>(null);
   const [inpVal, setInpVal] = useState<string>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -14,11 +14,14 @@ const InputForm = ({ todos, setTodos,btn }: IProps) => {
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!inpVal) {
+      alert("Please type some thing...!");
+      return;
+    }
     setTodos([...todos, { id: Date.now(), todo: inpVal, isDone: false }]);
     setInpVal("");
     inpRef.current?.blur();
   };
- 
 
   return (
     <Container>
