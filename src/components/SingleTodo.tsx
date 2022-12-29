@@ -1,33 +1,58 @@
-import React, {  useRef, useEffect } from "react";
+import axios from "axios";
+import React, { useRef, useEffect } from "react";
 import { Button, Card } from "react-bootstrap";
+import { toastify } from "../custom/toastify";
 import { ISingleTodo } from "../model";
+import { baseUrl } from "../variable";
 import EditTodo from "./EditTodo";
 
-const SingleTodo = ({ singleTodo, todos, setTodos,setEditID, editID }: ISingleTodo) => {
+const SingleTodo = ({
+  singleTodo,
+  todos,
+  setTodos,
+  setEditID,
+  editID,
+}: ISingleTodo) => {
   // const [editID, setEditID] = useState<number | null>(null);
   const inpRef = useRef<HTMLInputElement | null>(null);
-  const handleDone = (id: number) => {
-    const update = todos.map((todo) =>
-      todo.id === id ? { ...todo, isDone: !todo.isDone } : todo
-    );
-    setTodos(update);
+  const handleDone = async (id: string, isDone: boolean) => {
+    await axios
+      .put(`${baseUrl}/updateTodo`, {id, isDone: !isDone })
+      .then((res) => {    
+        toastify(res.data.message, "success");    
+        const update = todos.map((todo) =>
+          todo._id === id ? { ...todo, isDone: !todo.isDone } : todo
+        );
+        setTodos(update);
+      })
+      .catch((err) => {
+        toastify("Something went wrong!", "error");
+        console.log(err);
+      });
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm("Are you sure?") === true) {
-      const filter = todos.filter((todo) => todo.id !== id);
-      setTodos(filter);
+      await axios
+        .delete(`${baseUrl}/todo/${id}`)
+        .then((res) => {
+          toastify(res.data.message, "success");    
+          const filter = todos.filter((todo) => todo._id !== id);
+          setTodos(filter);
+        })
+        .catch((err) => {
+          toastify("Something went wrong!", "error");
+          console.log(err);
+        });
     }
   };
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     setEditID(id);
-
   };
   useEffect(() => {
     if (editID) {
-      inpRef.current?.focus();      
+      inpRef.current?.focus();
     }
-    
   }, [editID]);
   return (
     <>
@@ -36,7 +61,7 @@ const SingleTodo = ({ singleTodo, todos, setTodos,setEditID, editID }: ISingleTo
           <b>{singleTodo.isDone ? "Completed" : "Incomplete"}</b>
         </Card.Header>
         <Card.Body>
-          { editID === singleTodo.id ? (
+          {editID === singleTodo._id ? (
             <EditTodo
               todos={todos}
               todo={singleTodo}
@@ -56,23 +81,23 @@ const SingleTodo = ({ singleTodo, todos, setTodos,setEditID, editID }: ISingleTo
           <div className="mt-3">
             <Button
               variant="secondary"
-              onClick={() => handleEdit(singleTodo.id)}
-              disabled={ editID === singleTodo.id}
+              onClick={() => handleEdit(singleTodo._id)}
+              disabled={editID === singleTodo._id}
             >
               Edit
             </Button>
             <Button
               variant="danger"
               className="mx-1"
-              onClick={() => handleDelete(singleTodo.id)}
-              disabled={editID === singleTodo.id}
+              onClick={() => handleDelete(singleTodo._id)}
+              disabled={editID === singleTodo._id}
             >
               Delete
             </Button>
             <Button
               variant="primary"
-              onClick={() => handleDone(singleTodo.id)}
-              disabled={ editID === singleTodo.id}
+              onClick={() => handleDone(singleTodo._id, singleTodo.isDone)}
+              disabled={editID === singleTodo._id}
             >
               {singleTodo.isDone ? "Not Done" : "Done"}
             </Button>
