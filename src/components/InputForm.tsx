@@ -1,7 +1,11 @@
+import axios from "axios";
 import React, { useRef, useState } from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import InputBox from "../commonComponent/InputBox";
+import { fetchData } from "../custom/fetchData";
+import { toastify } from "../custom/toastify";
 import { PropsType } from "../model";
+import { baseUrl } from "../variable";
 interface IProps extends PropsType {
   btn: string;
 }
@@ -12,13 +16,32 @@ const InputForm = ({ todos, setTodos, btn }: IProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInpVal(e.target.value);
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inpVal) {
       alert("Please type some thing...!");
       return;
     }
-    setTodos([...todos, { id: Date.now(), todo: inpVal, isDone: false }]);
+    await axios
+      .post(`${baseUrl}/create`, { todo: inpVal })
+      .then(() => {
+        toastify("Created successfully !", "success");
+      })
+      .catch((err) => {
+        toastify("Something went wrong!", "error");
+        console.log(err);
+      });
+    await fetchData()
+      .then((ress) => {
+        setTodos(ress.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    // setTodos([
+    //   ...todos,
+    //   { _id: Date.now().toString(), todo: inpVal, isDone: false, __v: 1.1 },
+    // ]);
     setInpVal("");
     inpRef.current?.blur();
   };

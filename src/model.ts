@@ -1,9 +1,10 @@
 import { ChangeEvent } from "react";
 
 export interface Todo {
-  id: number;
-  todo: string;
-  isDone: boolean;
+  _id:string;
+  todo:string;
+  __v:number;
+  isDone:boolean;
 }
 
 export interface PropsType {
@@ -13,8 +14,8 @@ export interface PropsType {
 
 export interface ISingleTodo extends PropsType {
   singleTodo: Todo;
-  editID: number | null;
-  setEditID: React.Dispatch<React.SetStateAction<number | null>>;
+  editID: string | null;
+  setEditID: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export interface IInputBox {
@@ -30,5 +31,5 @@ export interface IInputBox {
 export interface IEdit extends PropsType {
   todo: Todo;
   inpRef: React.MutableRefObject<HTMLInputElement | null>;
-  setEditID: React.Dispatch<React.SetStateAction<number | null>>;
+  setEditID: React.Dispatch<React.SetStateAction<string | null>>;
 }

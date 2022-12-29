@@ -1,24 +1,36 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import InputBox from "../commonComponent/InputBox";
+import { toastify } from "../custom/toastify";
 import { IEdit } from "../model";
+import { baseUrl } from "../variable";
 
 const EditTodo = ({ todos, todo, setTodos, inpRef, setEditID }: IEdit) => {
   const [inpVal, setInpVal] = useState<string>(todo.todo || "");
   const handleChnage = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInpVal(e.target.value);
   };
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inpVal) {
       alert("Please type some thing...!");
       return;
     }
-    const edited = todos.map((item) =>
-      item.id === todo.id ? { ...item, todo: inpVal } : item
-    );
-    setTodos(edited);
-    setEditID(null);
+    await axios
+      .put(`${baseUrl}/updateTodo`, { todo: inpVal })
+      .then((res) => {
+        toastify(res.data.message, "success");    
+        const edited = todos.map((item) =>
+          item._id === todo._id ? { ...item, todo: inpVal } : item
+        );
+        setTodos(edited);
+        setEditID(null);
+      })
+      .catch((err) => {
+        toastify("Something went wrong!", "error");
+        console.log(err);
+      });
   };
   return (
     <>

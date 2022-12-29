@@ -4,26 +4,29 @@ import InputForm from "./components/InputForm";
 import TodoList from "./components/TodoList";
 import { Todo } from "./model";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([
-    {
-      id: 1,
-      todo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.",
-      isDone: false,
-    },
-    {
-      id: 2,
-      todo: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.",
-      isDone: true,
-    },
-  ]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   return (
     <div className="App">
       <h1>Todo App</h1>
       <InputForm todos={todos} setTodos={setTodos} btn="Add" />
       <TodoList todos={todos} setTodos={setTodos} />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </div>
   );
 }
