@@ -35,7 +35,7 @@ const TodoList = ({ todos, setTodos }: PropsType) => {
         ) : (
           <Row>
             {todos &&
-              todos.length > 0 &&
+              todos.length > 0 ?
               todos.map((item) => (
                 <Col lg={3} md={6} sm={12} key={item._id}>
                   <SingleTodo
@@ -46,7 +46,10 @@ const TodoList = ({ todos, setTodos }: PropsType) => {
                     setEditID={setEditID}
                   />
                 </Col>
-              ))}
+              )):<h3>
+              
+              <small className="text-muted">Todo is empty !</small>
+            </h3>}
           </Row>
         )}
       </div>
