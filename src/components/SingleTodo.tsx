@@ -5,6 +5,12 @@ import { toastify } from "../custom/toastify";
 import { ISingleTodo } from "../model";
 import { baseUrl } from "../variable";
 import EditTodo from "./EditTodo";
+import {
+  MdOutlineModeEditOutline,
+  MdDeleteOutline,
+  MdOutlineDoneAll,
+  MdOutlineRemoveDone,
+} from "react-icons/md";
 
 const SingleTodo = ({
   singleTodo,
@@ -17,9 +23,9 @@ const SingleTodo = ({
   const inpRef = useRef<HTMLInputElement | null>(null);
   const handleDone = async (id: string, isDone: boolean) => {
     await axios
-      .put(`${baseUrl}/updateTodo`, {id, isDone: !isDone })
-      .then((res) => {    
-        toastify(res.data.message, "success");    
+      .put(`${baseUrl}/updateTodo`, { id, isDone: !isDone })
+      .then((res) => {
+        toastify(res.data.message, "success");
         const update = todos.map((todo) =>
           todo._id === id ? { ...todo, isDone: !todo.isDone } : todo
         );
@@ -36,7 +42,7 @@ const SingleTodo = ({
       await axios
         .delete(`${baseUrl}/todo/${id}`)
         .then((res) => {
-          toastify(res.data.message, "success");    
+          toastify(res.data.message, "success");
           const filter = todos.filter((todo) => todo._id !== id);
           setTodos(filter);
         })
@@ -80,26 +86,33 @@ const SingleTodo = ({
           )}
           <div className="mt-3">
             <Button
-              variant="secondary"
+            className="btn-icon btn-sm btn-outlined"
+              variant="outline-secondary"
               onClick={() => handleEdit(singleTodo._id)}
               disabled={editID === singleTodo._id}
             >
-              Edit
+              <MdOutlineModeEditOutline />
             </Button>
             <Button
-              variant="danger"
-              className="mx-1"
+              variant="outline-danger"
+              className="mx-1 btn-icon btn-sm"
               onClick={() => handleDelete(singleTodo._id)}
               disabled={editID === singleTodo._id}
             >
-              Delete
+              <MdDeleteOutline />
             </Button>
             <Button
-              variant="primary"
+            
+              variant="outline-primary"
+              className="btn-icon btn-sm"
               onClick={() => handleDone(singleTodo._id, singleTodo.isDone)}
               disabled={editID === singleTodo._id}
             >
-              {singleTodo.isDone ? "Not Done" : "Done"}
+              {singleTodo.isDone ? (
+                <MdOutlineRemoveDone />
+              ) : (
+                <MdOutlineDoneAll />
+              )}
             </Button>
           </div>
         </Card.Body>

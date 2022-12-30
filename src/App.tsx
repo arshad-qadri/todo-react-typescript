@@ -13,7 +13,7 @@ function App() {
   return (
     <div className="App">
       <h1>Todo App</h1>
-      <InputForm todos={todos} setTodos={setTodos} btn="Add" />
+      <InputForm todos={todos} setTodos={setTodos} />
       <TodoList todos={todos} setTodos={setTodos} />
       <ToastContainer
         position="top-right"

@@ -6,11 +6,10 @@ import { fetchData } from "../custom/fetchData";
 import { toastify } from "../custom/toastify";
 import { PropsType } from "../model";
 import { baseUrl } from "../variable";
-interface IProps extends PropsType {
-  btn: string;
-}
+import {BiPlusMedical} from "react-icons/bi"
 
-const InputForm = ({ todos, setTodos, btn }: IProps) => {
+
+const InputForm = ({ todos, setTodos}: PropsType) => {
   const inpRef = useRef<HTMLInputElement | null>(null);
   const [inpVal, setInpVal] = useState<string>("");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,7 +62,7 @@ const InputForm = ({ todos, setTodos, btn }: IProps) => {
             />
 
             <Button variant="primary" type="submit" className="ms-1">
-              {btn}
+              <BiPlusMedical/>
             </Button>
           </Form>
         </Col>
