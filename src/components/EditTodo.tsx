@@ -5,6 +5,7 @@ import InputBox from "../commonComponent/InputBox";
 import { toastify } from "../custom/toastify";
 import { IEdit } from "../model";
 import { baseUrl } from "../variable";
+import {FaCheck} from "react-icons/fa"
 
 const EditTodo = ({ todos, todo, setTodos, inpRef, setEditID }: IEdit) => {
   const [inpVal, setInpVal] = useState<string>(todo.todo || "");
@@ -45,8 +46,8 @@ const EditTodo = ({ todos, todo, setTodos, inpRef, setEditID }: IEdit) => {
           onChange={handleChnage}
           inpRef={inpRef}
         />
-        <Button type="submit" variant="primary" className="ms-1">
-          Edit
+        <Button type="submit" variant="primary" className="ms-1 btn-icon-edit">
+          <FaCheck/>
         </Button>
       </Form>
     </>
